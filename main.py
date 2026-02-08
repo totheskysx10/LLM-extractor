@@ -1,22 +1,12 @@
-from ocr.processor import OCRProcessor
-from ocr.service import OCRService
+from config import Config
+from tests.test_runner import TestRunner
 
 
-def main():
-    images = [
-        "test1.jpg"
-    ]
-
-    ocr_processor = OCRProcessor()
-    ocr_service = OCRService(ocr_processor)
-
-    results = ocr_service.recognize_images(images)
-
-    print("\nOCR Результат")
-    for i, page in enumerate(results, start=1):
-        print(f"\nстраница {i}")
-        print(page)
+def main() -> int:
+    config = Config()
+    runner = TestRunner(config)
+    return runner.run()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

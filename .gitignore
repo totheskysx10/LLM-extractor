@@ -1,0 +1,8 @@
+/backup.sql
+/dataset/
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+.idea/

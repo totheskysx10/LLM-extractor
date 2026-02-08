@@ -21,10 +21,10 @@ class OCRService:
         with open(path, "wb") as f:
             f.write(data)
 
-    def recognize_images(self, images_b64: list[str]):
-        for idx, img_b64 in enumerate(images_b64):
+    def recognize_images(self, images: list[str]):
+        for idx, img in enumerate(images):
             print(f"\nобработка изображения {idx}")
-            task_id = self.processor.create_task(img_b64)
+            task_id = self.processor.create_task(self.encode_image(img))
 
             status = self.processor.wait_for_task(task_id)
             if status == "success":
@@ -32,6 +32,6 @@ class OCRService:
                 decoded = [self.decode_result(elem) for elem in data.pages]
 
                 for i, page in enumerate(decoded):
-                    self.save_result(page, f"image_{idx}_page_{i}.json")
+                    self.save_result(page, f"{img}.json")
             else:
                 print(f"распознавание изображения {idx} завершилось ошибкой")

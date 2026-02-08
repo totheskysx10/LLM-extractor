@@ -34,12 +34,7 @@ class OCRProcessor:
         print(f"создана задача: {task_id}")
         return task_id
 
-    def wait_for_task(
-            self,
-            task_id: str,
-            max_polls: int = MAX_POLLS,
-            interval_s: float = POLL_INTERVAL_S,
-    ) -> Literal["success", "error"]:
+    def wait_for_task(self, task_id: str, max_polls: int = MAX_POLLS, interval_s: float = POLL_INTERVAL_S) -> Literal["success", "error"]:
         for _ in range(max_polls):
             status_resp = requests.get(
                 f"{self.base_url}/tasks/{task_id}/status",
