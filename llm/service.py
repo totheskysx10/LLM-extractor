@@ -8,7 +8,7 @@ from llm.prompt import LLMPrompt
 from ocr.prepare import OCRPrepare
 
 
-class LLMProcessor:
+class LLMService:
     def __init__(self, config: Config):
         self.config = config
         self.db = DatabaseManager(config)

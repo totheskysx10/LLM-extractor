@@ -2,14 +2,14 @@ from typing import Dict
 from pathlib import Path
 
 from config import Config
-from llm.processor import LLMProcessor
+from llm.service import LLMService
 from tests.test_data import TestData
 
 
 class TestRunner:
     def __init__(self, config: Config):
         self.config = config
-        self.llm = LLMProcessor(config)
+        self.llm = LLMService(config)
         self.test_data = TestData()
 
     def run(self) -> int:

@@ -1,12 +1,14 @@
-from config import Config
-from tests.test_runner import TestRunner
+import uvicorn
 
 
-def main() -> int:
-    config = Config()
-    runner = TestRunner(config)
-    return runner.run()
+def main():
+    uvicorn.run(
+        "api.app:app",
+        host="0.0.0.0",
+        port=8000,
+        workers=1
+    )
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

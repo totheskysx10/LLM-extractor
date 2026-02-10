@@ -16,6 +16,11 @@ class Config:
     DB_PASSWORD = "1"
     DB_TABLE = "llm_learned_fields"
 
+    S3_ACCESS_KEY = ""
+    S3_SECRET_KEY = ""
+    S3_BUCKET = "ocr-s3"
+    S3_ENDPOINT = "https://storage.yandexcloud.net"
+
     @property
     def db_dsn(self) -> str:
         return (
