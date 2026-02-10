@@ -3,7 +3,7 @@ from typing import List, Dict
 
 
 class OCRPrepare:
-    def extract_words(self, ocr_json: str) -> List[Dict]:
+    def parse(self, ocr_json: str) -> List[Dict]:
         data = json.loads(ocr_json)
         words = []
 
@@ -25,9 +25,6 @@ class OCRPrepare:
 
         walk(data)
         return words
-
-    def prepare(self, ocr_json: str) -> List[Dict]:
-        return self.extract_words(ocr_json)
 
     def to_compact_text(self, words: List[Dict]) -> str:
         return "\n".join(

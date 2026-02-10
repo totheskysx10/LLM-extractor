@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 from typing import Dict
+from pathlib import Path
 
 from config import Config
 from llm.processor import LLMProcessor
@@ -17,8 +16,7 @@ class TestRunner:
         errors = 0
 
         for test in self.test_data.tests_definition():
-            success = self.run_single_test(test)
-            if not success:
+            if not self.run_single_test(test):
                 errors += 1
 
         print("\nQUALITY METRICS")
@@ -36,26 +34,35 @@ class TestRunner:
         print(f"\nDOCUMENT: {document_type}, FIELD: {field_name}")
         print("LEARN MODE")
 
-        examples = self.llm.prepare_examples_from_files(test["learn_examples"])
+        learn_examples = []
+        for ex in test["learn_examples"]:
+            ocr_json = Path(ex["ocr_file"]).read_text(encoding="utf-8")
+            value = Path(ex["value"]).read_text().strip() if Path(ex["value"]).is_file() else ex["value"]
 
-        learned_context = self.llm.learn_field_location(
+            learn_examples.append({
+                "value": value,
+                "ocr_json": ocr_json,
+            })
+
+        self.llm.learn_field_location(
             document_type=document_type,
             field_name=field_name,
-            examples=examples,
+            examples=learn_examples,
+            force=False,
         )
 
         print("APPLY MODE")
 
         success = True
 
-        for target in test["apply_examples"]:
-            target_example = self.llm.prepare_examples_from_files([target])
-            target_ocr = target_example[0]["example_ocr"]
-            gt_value = target.get("value", "").strip()
+        for target in test["apply_values"]:
+            ocr_json = Path(target["ocr_file"]).read_text(encoding="utf-8")
+            gt_value = Path(target["value"]).read_text().strip() if Path(target["value"]).is_file() else target["value"]
 
             pred_value = self.llm.extract_field(
-                target_ocr=target_ocr,
-                learned_context=learned_context
+                target_ocr_json=ocr_json,
+                document_type=document_type,
+                field_name=field_name,
             )
 
             print(f"OCR: {target['ocr_file']}")

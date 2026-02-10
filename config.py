@@ -7,7 +7,7 @@ class Config:
     LLM_URL = "http://localhost:11434"
     LLM_TEMPERATURE = 0.0
     LLM_MAX_TOKENS = 512
-    LLM_MAX_CTX = 12288
+    LLM_MAX_CTX = 12248
 
     DB_HOST = "localhost"
     DB_PORT = 5432

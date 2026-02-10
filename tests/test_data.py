@@ -1,4 +1,3 @@
-import unittest
 from typing import Dict, List
 
 
@@ -18,7 +17,7 @@ class TestData:
                         "ocr_file": "dataset/vu2.png.json",
                     },
                 ],
-                "apply_examples": [
+                "apply_values": [
                     {
                         "value": "Александр Евгеньевич",
                         "ocr_file": "dataset/vu3.png.json",
@@ -54,7 +53,7 @@ class TestData:
                         "ocr_file": "dataset/pass2.png.json",
                     },
                 ],
-                "apply_examples": [
+                "apply_values": [
                     {
                         "value": "Макеев",
                         "ocr_file": "dataset/pass3.png.json",
@@ -90,7 +89,7 @@ class TestData:
                         "ocr_file": "dataset/pass2.png.json",
                     },
                 ],
-                "apply_examples": [
+                "apply_values": [
                     {
                         "value": "23.07.2019",
                         "ocr_file": "dataset/pass3.png.json",
@@ -115,7 +114,7 @@ class TestData:
             },
             {
                 "document_type": "Снилс",
-                "field_name": "Номер Страхового свидетельства обязательного пенсионного страхования",
+                "field_name": "Номер",
                 "learn_examples": [
                     {
                         "value": "001-001-001 00",
@@ -126,7 +125,7 @@ class TestData:
                         "ocr_file": "dataset/snils2.png.json",
                     },
                 ],
-                "apply_examples": [
+                "apply_values": [
                     {
                         "value": "126-029-036 24",
                         "ocr_file": "dataset/snils3.png.json",
@@ -162,7 +161,7 @@ class TestData:
                         "ocr_file": "dataset/dkp2.png.json",
                     },
                 ],
-                "apply_examples": [
+                "apply_values": [
                     {
                         "value": "Subaru Impreza",
                         "ocr_file": "dataset/dkp3.png.json",

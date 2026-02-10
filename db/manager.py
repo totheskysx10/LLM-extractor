@@ -51,11 +51,3 @@ class DatabaseManager:
             cur.execute(sql, (document_type, field_name))
             row = cur.fetchone()
             return row[0] if row else None
-
-    def delete_by_id(self, record_id: int) -> bool:
-        sql = f"DELETE FROM {self.table_name} WHERE id = %s;"
-        with self._connect() as conn, conn.cursor() as cur:
-            cur.execute(sql, (record_id,))
-            deleted = cur.rowcount > 0
-            conn.commit()
-            return deleted

@@ -1,4 +1,3 @@
-import time
 from typing import Optional, Dict, Any
 import json
 import urllib.request
