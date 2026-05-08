@@ -1,4 +1,5 @@
 import base64
+import pathlib
 import uuid
 from typing import Sequence
 
@@ -12,14 +13,22 @@ class OCRService:
         self.s3 = S3Client()
 
     @staticmethod
-    def encode_image(img_bytes: bytes) -> str:
-        return base64.b64encode(img_bytes).decode("utf-8")
+    def encode_image(path: str | pathlib.Path) -> str:
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
 
     @staticmethod
     def decode_result(data: str) -> bytes:
         return base64.b64decode(data)
 
-    def recognize_images(self, images: list[bytes]) -> str:
+    @staticmethod
+    def save_result(data: bytes, path: str | pathlib.Path) -> None:
+        with open(path, "wb") as f:
+            f.write(data)
+
+    def recognize_images(self, images: list[str]):
+        all_results = []  # Собираем все результаты
+
         for idx, img in enumerate(images):
             print(f"\nобработка изображения {idx}")
             task_id = self.processor.create_task(self.encode_image(img))
@@ -29,8 +38,11 @@ class OCRService:
                 data = self.processor.fetch_result(task_id)
                 decoded = [self.decode_result(elem) for elem in data.pages]
 
+                all_results.extend(decoded)
+
                 for i, page in enumerate(decoded):
-                    random_uuid = uuid.uuid4()
-                    return self.s3.upload(page, f"{random_uuid}.json")
+                    self.save_result(page, f"{img}.json")
             else:
                 print(f"распознавание изображения {idx} завершилось ошибкой")
+
+        return all_results

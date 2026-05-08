@@ -9,6 +9,7 @@ class DatabaseManager:
     def __init__(self, config: Config):
         self.dsn = config.db_dsn
         self.table_name = config.DB_TABLE
+        self.doc_table_name = config.DB_TABLE_DOC
         self._ensure_table()
 
     def _connect(self):
@@ -23,6 +24,12 @@ class DatabaseManager:
             learned_context TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT NOW(),
             UNIQUE (document_type, field_name)
+        );
+            
+        CREATE TABLE IF NOT EXISTS {self.doc_table_name} (
+            id serial PRIMARY KEY,
+            doc_name TEXT NOT NULL,
+            embedding VECTOR(4096) NOT NULL
         );
         """
         with self._connect() as conn, conn.cursor() as cur:
@@ -49,5 +56,27 @@ class DatabaseManager:
         """
         with self._connect() as conn, conn.cursor() as cur:
             cur.execute(sql, (document_type, field_name))
+            row = cur.fetchone()
+            return row[0] if row else None
+
+    def save_document(self, doc_name, embedding):
+        sql = f"""
+        INSERT INTO {self.doc_table_name} (doc_name, embedding)
+        VALUES (%s, %s)
+        """
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(sql, (doc_name, embedding))
+            conn.commit()
+
+    def get_relevant_document(self, query_embedding):
+        sql = f"""
+        SELECT doc_name
+        FROM {self.doc_table_name}
+        WHERE embedding <=> %s::vector < 0.45
+        ORDER BY embedding <=> %s::vector
+        LIMIT 1
+        """
+        with self._connect() as conn, conn.cursor() as cur:
+            cur.execute(sql, (query_embedding,query_embedding))
             row = cur.fetchone()
             return row[0] if row else None

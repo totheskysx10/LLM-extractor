@@ -36,7 +36,6 @@ def predict(req: PredictRequest):
     def task():
         return llm.extract_field(
             target_ocr_json=req.ocr_json,
-            document_type=req.document_type,
             field_name=req.field_name,
         )
 

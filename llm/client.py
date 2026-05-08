@@ -16,6 +16,7 @@ class LLMClient:
             "model": self.config.LLM_MODEL,
             "prompt": full_prompt,
             "stream": False,
+            "think": False,
             "options": {
                 "temperature": self.config.LLM_TEMPERATURE,
                 "num_predict": self.config.LLM_MAX_TOKENS,

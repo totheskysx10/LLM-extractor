@@ -67,7 +67,7 @@ class TestData:
                         "ocr_file": "dataset/pass5.png.json",
                     },
                     {
-                        "value": "Подлужный",
+                        "value": "Захаров",
                         "ocr_file": "dataset/pass6.png.json",
                     },
                     {
@@ -103,7 +103,7 @@ class TestData:
                         "ocr_file": "dataset/pass5.png.json",
                     },
                     {
-                        "value": "06.03.2013",
+                        "value": "29.11.2011",
                         "ocr_file": "dataset/pass6.png.json",
                     },
                     {

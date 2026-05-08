@@ -3,6 +3,7 @@ from typing import Optional, List, Dict
 from config import Config
 from db.manager import DatabaseManager
 from llm.client import LLMClient
+from llm.embedding_manager import EmbeddingManager
 from llm.metrics import LLMMetrics
 from llm.prompt import LLMPrompt
 from ocr.prepare import OCRPrepare
@@ -15,6 +16,7 @@ class LLMService:
         self.llm = LLMClient(config)
         self.llm_prompt = LLMPrompt()
         self.llm_metrics = LLMMetrics()
+        self.embedding_manager = EmbeddingManager(config)
         self.ocrp = OCRPrepare()
 
     def run_prompt(self, prompt: str, system: Optional[str] = None, metrics: bool = False) -> str:
@@ -47,6 +49,8 @@ class LLMService:
 
         for i, ex in enumerate(examples, 1):
             ocr_compact = self._prepare_ocr(ex["ocr_json"])
+            ocr_vector = self.embedding_manager.create_vector(ocr_compact)
+            self.db.save_document(doc_name=document_type, embedding=ocr_vector)
 
             examples_block += self.llm_prompt.EXAMPLES_PATTERN.format(
                 index=i,
@@ -72,12 +76,17 @@ class LLMService:
 
         return learned_context
 
-    def extract_field(self, target_ocr_json: str, document_type: str, field_name: str) -> str:
+    def extract_field(self, target_ocr_json: str, field_name: str) -> str:
+        ocr_compact = self._prepare_ocr(target_ocr_json)
+        ocr_vector = self.embedding_manager.create_vector(ocr_compact)
+        document_type = self.db.get_relevant_document(query_embedding=ocr_vector)
+        if document_type is None:
+            raise KeyError("No this doc type!")
+        print(f"DOC: {document_type}")
+
         learned_context = self.db.get_learned_context(document_type, field_name)
         if not learned_context:
             raise KeyError("No learned context for this field!")
-
-        ocr_compact = self._prepare_ocr(target_ocr_json)
 
         prompt = self.llm_prompt.APPLY_PROMPT.format(
             target_ocr=ocr_compact,

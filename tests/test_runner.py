@@ -16,6 +16,7 @@ class TestRunner:
         errors = 0
 
         for test in self.test_data.tests_definition():
+
             if not self.run_single_test(test):
                 errors += 1
 
@@ -61,7 +62,6 @@ class TestRunner:
 
             pred_value = self.llm.extract_field(
                 target_ocr_json=ocr_json,
-                document_type=document_type,
                 field_name=field_name,
             )
 

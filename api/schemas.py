@@ -19,7 +19,6 @@ class LearnJobResponse(BaseModel):
 
 
 class PredictRequest(BaseModel):
-    document_type: str
     field_name: str
     ocr_json: str
 

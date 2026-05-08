@@ -1,13 +1,15 @@
 class Config:
-    OCR_API_KEY = ""
+    OCR_API_KEY = "
     OCR_BASE_URL = "https://ocrbot.ru/api/v1"
 
     LLM_BACK = "ollama"
-    LLM_MODEL = "qwen2.5:14b-instruct-q4_K_M"
+    LLM_MODEL = "qwen3.5:9b-Q4_K_M"
     LLM_URL = "http://localhost:11434"
+    EMBEDDING_URL = "http://localhost:11434"
+    EMBEDDING_MODEL = "qwen3-embedding"
     LLM_TEMPERATURE = 0.0
-    LLM_MAX_TOKENS = 512
-    LLM_MAX_CTX = 12248
+    LLM_MAX_TOKENS = 1024
+    LLM_MAX_CTX = 36768
 
     DB_HOST = "localhost"
     DB_PORT = 5432
@@ -15,6 +17,7 @@ class Config:
     DB_USER = "postgres"
     DB_PASSWORD = "1"
     DB_TABLE = "llm_learned_fields"
+    DB_TABLE_DOC = "llm_learned_docs"
 
     S3_ACCESS_KEY = ""
     S3_SECRET_KEY = ""
