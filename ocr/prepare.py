@@ -28,6 +28,6 @@ class OCRPrepare:
 
     def to_compact_text(self, words: List[Dict]) -> str:
         return "\n".join(
-            f'X={w["x"]} Y={w["y"]} W={w["w"]} H={w["h"]} TEXT={w["text"]}'
+            f'TEXT={w["text"]}'
             for w in words
         )
